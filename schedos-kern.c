@@ -98,7 +98,7 @@ start(void)
 	cursorpos = (uint16_t *) 0xB8000;
 
 	// Initialize the scheduling algorithm.
-	scheduling_algorithm = 0;
+	scheduling_algorithm = 1;
 
 	// Switch to the first process.
 	run(&proc_array[1]);
@@ -201,6 +201,24 @@ schedule(void)
 				run(&proc_array[pid]);
 		}
 
+	if(scheduling_algorithm == 1){
+	 
+		pid = current->p_pid;
+		pid_t next_pid =0;
+	
+		int i;
+		for(i =1; i < NPROCS; i++)
+		{
+			if(proc_array[i].p_state == P_RUNNABLE)
+				{
+					next_pid = i;
+					break;
+				}
+		}
+
+		run(&proc_array[next_pid]);
+
+	}
 	// If we get here, we are running an unknown scheduling algorithm.
 	cursorpos = console_printf(cursorpos, 0x100, "\nUnknown scheduling algorithm %d\n", scheduling_algorithm);
 	while (1)

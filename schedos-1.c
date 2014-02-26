@@ -30,6 +30,6 @@ start(void)
 	}
 
 	// Yield forever.
-	while (1)
-		sys_yield();
+	//while (1)
+		sys_exit(0);
 }
