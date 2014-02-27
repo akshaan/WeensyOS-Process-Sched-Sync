@@ -106,6 +106,9 @@ start(void)
 	// Switch to the first process.
 	run(&proc_array[1]);
 
+	// Set the lock to 'unlocked'
+	lock = 0;
+
 	// Should never get here!
 	while (1)
 		/* do nothing */;

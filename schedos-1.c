@@ -26,7 +26,10 @@ start(void)
 
 	for (i = 0; i < RUNCOUNT; i++) {
 		// Write characters to the console, yielding after each one.
+		while(atomic_swap((uint32_t*)&lock,1) != 0){};
 		*cursorpos++ = PRINTCHAR;
+		atomic_swap((uint32_t *)&lock,0);
+
 	//	sys_prior(1);
 		sys_yield();
 	}
