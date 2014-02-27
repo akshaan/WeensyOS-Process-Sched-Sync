@@ -207,11 +207,11 @@ schedule(void)
   10009c:	53                   	push   %ebx
   10009d:	83 ec 08             	sub    $0x8,%esp
 	pid_t pid = current->p_pid;
-  1000a0:	a1 94 7f 10 00       	mov    0x107f94,%eax
+  1000a0:	a1 a4 7f 10 00       	mov    0x107fa4,%eax
   1000a5:	8b 10                	mov    (%eax),%edx
 
 	if (scheduling_algorithm == 0)
-  1000a7:	a1 98 7f 10 00       	mov    0x107f98,%eax
+  1000a7:	a1 a8 7f 10 00       	mov    0x107fa8,%eax
   1000ac:	85 c0                	test   %eax,%eax
   1000ae:	75 1c                	jne    1000cc <schedule+0x30>
 		while (1) {
@@ -226,7 +226,7 @@ schedule(void)
 			// Note that the 'run' function does not return.
 			if (proc_array[pid].p_state == P_RUNNABLE)
   1000bb:	6b c2 54             	imul   $0x54,%edx,%eax
-  1000be:	83 b8 d0 75 10 00 01 	cmpl   $0x1,0x1075d0(%eax)
+  1000be:	83 b8 e0 75 10 00 01 	cmpl   $0x1,0x1075e0(%eax)
   1000c5:	75 ee                	jne    1000b5 <schedule+0x19>
 				run(&proc_array[pid]);
   1000c7:	83 ec 0c             	sub    $0xc,%esp
@@ -242,16 +242,16 @@ schedule(void)
 		for(i =1; i < NPROCS; i++)
 		{
 			if(proc_array[i].p_state == P_RUNNABLE)
-  1000d1:	83 3d 24 76 10 00 01 	cmpl   $0x1,0x107624
+  1000d1:	83 3d 34 76 10 00 01 	cmpl   $0x1,0x107634
   1000d8:	74 25                	je     1000ff <schedule+0x63>
-  1000da:	83 3d 78 76 10 00 01 	cmpl   $0x1,0x107678
+  1000da:	83 3d 88 76 10 00 01 	cmpl   $0x1,0x107688
   1000e1:	b0 02                	mov    $0x2,%al
   1000e3:	74 1a                	je     1000ff <schedule+0x63>
-  1000e5:	83 3d cc 76 10 00 01 	cmpl   $0x1,0x1076cc
+  1000e5:	83 3d dc 76 10 00 01 	cmpl   $0x1,0x1076dc
   1000ec:	b0 03                	mov    $0x3,%al
   1000ee:	74 0f                	je     1000ff <schedule+0x63>
   1000f0:	31 c0                	xor    %eax,%eax
-  1000f2:	83 3d 20 77 10 00 01 	cmpl   $0x1,0x107720
+  1000f2:	83 3d 30 77 10 00 01 	cmpl   $0x1,0x107730
   1000f9:	0f 94 c0             	sete   %al
   1000fc:	c1 e0 02             	shl    $0x2,%eax
 					next_pid = i;
@@ -262,7 +262,7 @@ schedule(void)
 		run(&proc_array[next_pid]);
   1000ff:	6b c0 54             	imul   $0x54,%eax,%eax
   100102:	83 ec 0c             	sub    $0xc,%esp
-  100105:	05 88 75 10 00       	add    $0x107588,%eax
+  100105:	05 98 75 10 00       	add    $0x107598,%eax
   10010a:	50                   	push   %eax
   10010b:	e8 25 04 00 00       	call   100535 <run>
 
@@ -279,10 +279,10 @@ schedule(void)
 	for(i = 1; i < NPROCS; i++)
 	{
 		if(proc_array[i].p_priority < min && proc_array[i].p_state == P_RUNNABLE)
-  10011c:	8b 88 2c 76 10 00    	mov    0x10762c(%eax),%ecx
+  10011c:	8b 88 3c 76 10 00    	mov    0x10763c(%eax),%ecx
   100122:	39 d9                	cmp    %ebx,%ecx
   100124:	7d 09                	jge    10012f <schedule+0x93>
-  100126:	83 b8 24 76 10 00 01 	cmpl   $0x1,0x107624(%eax)
+  100126:	83 b8 34 76 10 00 01 	cmpl   $0x1,0x107634(%eax)
   10012d:	74 02                	je     100131 <schedule+0x95>
   10012f:	89 d9                	mov    %ebx,%ecx
   100131:	83 c0 54             	add    $0x54,%eax
@@ -310,9 +310,9 @@ schedule(void)
 		{
 			if(proc_array[k].p_state == P_RUNNABLE && \
   10014a:	6b c2 54             	imul   $0x54,%edx,%eax
-  10014d:	83 b8 d0 75 10 00 01 	cmpl   $0x1,0x1075d0(%eax)
+  10014d:	83 b8 e0 75 10 00 01 	cmpl   $0x1,0x1075e0(%eax)
   100154:	75 0f                	jne    100165 <schedule+0xc9>
-  100156:	05 88 75 10 00       	add    $0x107588,%eax
+  100156:	05 98 75 10 00       	add    $0x107598,%eax
   10015b:	39 48 50             	cmp    %ecx,0x50(%eax)
   10015e:	75 05                	jne    100165 <schedule+0xc9>
 			{next = k; break; }
@@ -358,7 +358,7 @@ interrupt(registers_t *reg)
 	// Save the current process's register state
 	// into its process descriptor
 	current->p_registers = *reg;
-  10018c:	8b 3d 94 7f 10 00    	mov    0x107f94,%edi
+  10018c:	8b 3d a4 7f 10 00    	mov    0x107fa4,%edi
   100192:	b9 11 00 00 00       	mov    $0x11,%ecx
  *
  *****************************************************************************/
@@ -404,7 +404,7 @@ interrupt(registers_t *reg)
 		// out of the 'reg' argument.
 		// (This shows you how to transfer arguments to system calls!)
 		current->p_state = P_ZOMBIE;
-  1001cd:	a1 94 7f 10 00       	mov    0x107f94,%eax
+  1001cd:	a1 a4 7f 10 00       	mov    0x107fa4,%eax
 		current->p_exit_status = reg->reg_eax;
   1001d2:	8b 53 1c             	mov    0x1c(%ebx),%edx
 		// The application stored its exit status in the %eax register
@@ -425,7 +425,7 @@ interrupt(registers_t *reg)
 		/* Your code here (if you want). */
 		current->p_priority = reg->reg_eax;
   1001e4:	8b 53 1c             	mov    0x1c(%ebx),%edx
-  1001e7:	a1 94 7f 10 00       	mov    0x107f94,%eax
+  1001e7:	a1 a4 7f 10 00       	mov    0x107fa4,%eax
   1001ec:	89 50 50             	mov    %edx,0x50(%eax)
 
 	case INT_SYS_USER2: // LOCK
@@ -506,7 +506,7 @@ start(void)
 	for (i = 0; i < NPROCS; i++) {
 		proc_array[i].p_pid = i;
 		proc_array[i].p_state = P_EMPTY;
-  100224:	bb dc 75 10 00       	mov    $0x1075dc,%ebx
+  100224:	bb ec 75 10 00       	mov    $0x1075ec,%ebx
 start(void)
 {
 	int i;
@@ -526,7 +526,7 @@ start(void)
   10023d:	83 c4 0c             	add    $0xc,%esp
   100240:	68 a4 01 00 00       	push   $0x1a4
   100245:	6a 00                	push   $0x0
-  100247:	68 88 75 10 00       	push   $0x107588
+  100247:	68 98 75 10 00       	push   $0x107598
   10024c:	e8 27 04 00 00       	call   100678 <memset>
 	for (i = 0; i < NPROCS; i++) {
 		proc_array[i].p_pid = i;
@@ -538,10 +538,10 @@ start(void)
 	memset(proc_array, 0, sizeof(proc_array));
 	for (i = 0; i < NPROCS; i++) {
 		proc_array[i].p_pid = i;
-  100254:	c7 05 88 75 10 00 00 	movl   $0x0,0x107588
+  100254:	c7 05 98 75 10 00 00 	movl   $0x0,0x107598
   10025b:	00 00 00 
 		proc_array[i].p_state = P_EMPTY;
-  10025e:	c7 05 d0 75 10 00 00 	movl   $0x0,0x1075d0
+  10025e:	c7 05 e0 75 10 00 00 	movl   $0x0,0x1075e0
   100265:	00 00 00 
 	console_clear();
 
@@ -549,10 +549,10 @@ start(void)
 	memset(proc_array, 0, sizeof(proc_array));
 	for (i = 0; i < NPROCS; i++) {
 		proc_array[i].p_pid = i;
-  100268:	c7 05 dc 75 10 00 01 	movl   $0x1,0x1075dc
+  100268:	c7 05 ec 75 10 00 01 	movl   $0x1,0x1075ec
   10026f:	00 00 00 
 		proc_array[i].p_state = P_EMPTY;
-  100272:	c7 05 24 76 10 00 00 	movl   $0x0,0x107624
+  100272:	c7 05 34 76 10 00 00 	movl   $0x0,0x107634
   100279:	00 00 00 
 	console_clear();
 
@@ -560,10 +560,10 @@ start(void)
 	memset(proc_array, 0, sizeof(proc_array));
 	for (i = 0; i < NPROCS; i++) {
 		proc_array[i].p_pid = i;
-  10027c:	c7 05 30 76 10 00 02 	movl   $0x2,0x107630
+  10027c:	c7 05 40 76 10 00 02 	movl   $0x2,0x107640
   100283:	00 00 00 
 		proc_array[i].p_state = P_EMPTY;
-  100286:	c7 05 78 76 10 00 00 	movl   $0x0,0x107678
+  100286:	c7 05 88 76 10 00 00 	movl   $0x0,0x107688
   10028d:	00 00 00 
 	console_clear();
 
@@ -571,10 +571,10 @@ start(void)
 	memset(proc_array, 0, sizeof(proc_array));
 	for (i = 0; i < NPROCS; i++) {
 		proc_array[i].p_pid = i;
-  100290:	c7 05 84 76 10 00 03 	movl   $0x3,0x107684
+  100290:	c7 05 94 76 10 00 03 	movl   $0x3,0x107694
   100297:	00 00 00 
 		proc_array[i].p_state = P_EMPTY;
-  10029a:	c7 05 cc 76 10 00 00 	movl   $0x0,0x1076cc
+  10029a:	c7 05 dc 76 10 00 00 	movl   $0x0,0x1076dc
   1002a1:	00 00 00 
 	console_clear();
 
@@ -582,10 +582,10 @@ start(void)
 	memset(proc_array, 0, sizeof(proc_array));
 	for (i = 0; i < NPROCS; i++) {
 		proc_array[i].p_pid = i;
-  1002a4:	c7 05 d8 76 10 00 04 	movl   $0x4,0x1076d8
+  1002a4:	c7 05 e8 76 10 00 04 	movl   $0x4,0x1076e8
   1002ab:	00 00 00 
 		proc_array[i].p_state = P_EMPTY;
-  1002ae:	c7 05 20 77 10 00 00 	movl   $0x0,0x107720
+  1002ae:	c7 05 30 77 10 00 00 	movl   $0x0,0x107730
   1002b5:	00 00 00 
 	for (i = 1; i < NPROCS; i++) {
 		process_t *proc = &proc_array[i];
@@ -675,7 +675,7 @@ start(void)
 	// Switch to the first process.
 	run(&proc_array[1]);
   1002f0:	83 ec 0c             	sub    $0xc,%esp
-  1002f3:	68 dc 75 10 00       	push   $0x1075dc
+  1002f3:	68 ec 75 10 00       	push   $0x1075ec
 		proc->p_priority = 0;
 	}
 
@@ -687,7 +687,7 @@ start(void)
 
 	// Initialize the scheduling algorithm.
 	scheduling_algorithm = 0;
-  100302:	c7 05 98 7f 10 00 00 	movl   $0x0,0x107f98
+  100302:	c7 05 a8 7f 10 00 00 	movl   $0x0,0x107fa8
   100309:	00 00 00 
 
 	// Switch to the first process.
@@ -704,7 +704,7 @@ segments_init(void)
 
 	// Set task state segment
 	segments[SEGSEL_TASKSTATE >> 3]
-  100314:	b8 2c 77 10 00       	mov    $0x10772c,%eax
+  100314:	b8 3c 77 10 00       	mov    $0x10773c,%eax
 	kernel_task_descriptor.ts_ss0 = SEGSEL_KERN_DATA;
 
 	// Set up interrupt descriptor table.
@@ -750,7 +750,7 @@ segments_init(void)
 	// Most interrupts are effectively ignored
 	for (i = 0; i < sizeof(interrupt_descriptors) / sizeof(gatedescriptor_t); i++)
 		SETGATE(interrupt_descriptors[i], 0,
-  10033b:	ba 94 77 10 00       	mov    $0x107794,%edx
+  10033b:	ba a4 77 10 00       	mov    $0x1077a4,%edx
 segments_init(void)
 {
 	int i;
@@ -781,17 +781,17 @@ segments_init(void)
 
 	// Set up kernel task descriptor, so we can receive interrupts
 	kernel_task_descriptor.ts_esp0 = KERNEL_STACK_TOP;
-  10035e:	c7 05 30 77 10 00 00 	movl   $0x180000,0x107730
+  10035e:	c7 05 40 77 10 00 00 	movl   $0x180000,0x107740
   100365:	00 18 00 
 	kernel_task_descriptor.ts_ss0 = SEGSEL_KERN_DATA;
-  100368:	66 c7 05 34 77 10 00 	movw   $0x10,0x107734
+  100368:	66 c7 05 44 77 10 00 	movw   $0x10,0x107744
   10036f:	10 00 
 
 	// Set up interrupt descriptor table.
 	// Most interrupts are effectively ignored
 	for (i = 0; i < sizeof(interrupt_descriptors) / sizeof(gatedescriptor_t); i++)
 		SETGATE(interrupt_descriptors[i], 0,
-  100371:	66 89 0c c5 94 77 10 	mov    %cx,0x107794(,%eax,8)
+  100371:	66 89 0c c5 a4 77 10 	mov    %cx,0x1077a4(,%eax,8)
   100378:	00 
   100379:	66 c7 44 c2 02 08 00 	movw   $0x8,0x2(%edx,%eax,8)
   100380:	c6 44 c2 04 00       	movb   $0x0,0x4(%edx,%eax,8)
@@ -818,21 +818,21 @@ segments_init(void)
 	// (level-3) applications may generate these interrupts.
 	for (i = INT_SYS_YIELD; i < INT_SYS_YIELD + 10; i++)
 		SETGATE(interrupt_descriptors[i], 0,
-  10039c:	ba 94 77 10 00       	mov    $0x107794,%edx
+  10039c:	ba a4 77 10 00       	mov    $0x1077a4,%edx
 	for (i = 0; i < sizeof(interrupt_descriptors) / sizeof(gatedescriptor_t); i++)
 		SETGATE(interrupt_descriptors[i], 0,
 			SEGSEL_KERN_CODE, default_int_handler, 0);
 
 	// The clock interrupt gets special handling
 	SETGATE(interrupt_descriptors[INT_CLOCK], 0,
-  1003a1:	66 a3 94 78 10 00    	mov    %ax,0x107894
+  1003a1:	66 a3 a4 78 10 00    	mov    %ax,0x1078a4
   1003a7:	c1 e8 10             	shr    $0x10,%eax
-  1003aa:	66 a3 9a 78 10 00    	mov    %ax,0x10789a
+  1003aa:	66 a3 aa 78 10 00    	mov    %ax,0x1078aa
   1003b0:	b8 30 00 00 00       	mov    $0x30,%eax
-  1003b5:	66 c7 05 96 78 10 00 	movw   $0x8,0x107896
+  1003b5:	66 c7 05 a6 78 10 00 	movw   $0x8,0x1078a6
   1003bc:	08 00 
-  1003be:	c6 05 98 78 10 00 00 	movb   $0x0,0x107898
-  1003c5:	c6 05 99 78 10 00 8e 	movb   $0x8e,0x107899
+  1003be:	c6 05 a8 78 10 00 00 	movb   $0x0,0x1078a8
+  1003c5:	c6 05 a9 78 10 00 8e 	movb   $0x8e,0x1078a9
 
 	// System calls get special handling.
 	// Note that the last argument is '3'.  This means that unprivileged
@@ -841,7 +841,7 @@ segments_init(void)
 		SETGATE(interrupt_descriptors[i], 0,
   1003cc:	8b 0c 85 b2 ff 0f 00 	mov    0xfffb2(,%eax,4),%ecx
   1003d3:	66 c7 44 c2 02 08 00 	movw   $0x8,0x2(%edx,%eax,8)
-  1003da:	66 89 0c c5 94 77 10 	mov    %cx,0x107794(,%eax,8)
+  1003da:	66 89 0c c5 a4 77 10 	mov    %cx,0x1077a4(,%eax,8)
   1003e1:	00 
   1003e2:	c1 e9 10             	shr    $0x10,%ecx
   1003e5:	c6 44 c2 04 00       	movb   $0x0,0x4(%edx,%eax,8)
@@ -1112,7 +1112,7 @@ run(process_t *proc)
 {
   100535:	8b 44 24 04          	mov    0x4(%esp),%eax
 	current = proc;
-  100539:	a3 94 7f 10 00       	mov    %eax,0x107f94
+  100539:	a3 a4 7f 10 00       	mov    %eax,0x107fa4
 
 	asm volatile("movl %0,%%esp\n\t"
   10053e:	83 c0 04             	add    $0x4,%eax
