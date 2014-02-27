@@ -33,7 +33,11 @@ The first clock interrupt occurs during process 4. In the pattern shown, the fir
 
 (Exercise 6 is a coding exercise)
 
+Exercise 8:
+
+The alternate locking method implemented was through system calls. Two systems calls sys_lock_acquire() and sys_lock_release() were implemented. The interrupt codes used for them were INT_SYS_USER2 and INT_SYS_USER3 respectively. These are defined in schedos-app.h. The preprocessor symbols for the compliation of this alternate locking scheme is PART8. If PART8 is defined, it will be compiled. Else the scheme from Part 6 will be used.
 
 Anything else you'd like us to know:
+
 
 

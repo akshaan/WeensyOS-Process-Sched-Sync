@@ -17,6 +17,7 @@
 #ifndef PRINTCHAR
 #define PRINTCHAR	('1' | 0x0C00)
 //#define PRIORITY 4
+//#define PART8
 #endif
 
 void
@@ -26,10 +27,18 @@ start(void)
 
 	for (i = 0; i < RUNCOUNT; i++) {
 		// Write characters to the console, yielding after each one.
+
+	#ifndef PART8
 		while(atomic_swap((uint32_t*)&lock,1) != 0){};
 		*cursorpos++ = PRINTCHAR;
 		atomic_swap((uint32_t *)&lock,0);
+	#endif
 
+	#ifdef PART8
+		sys_lock_acquire();
+		*cursorpos++ = PRINTCHAR;
+		sys_lock_release();
+	#endif
 	//	sys_prior(1);
 		sys_yield();
 	}

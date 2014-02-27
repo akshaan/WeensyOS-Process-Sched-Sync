@@ -5,7 +5,7 @@ obj/schedos-1:     file format elf32-i386
 Disassembly of section .text:
 
 00200000 <start>:
-//#define PRIORITY 4
+//#define PART8
 #endif
 
 void
@@ -20,10 +20,11 @@ atomic_swap(uint32_t *addr, uint32_t val)
 	asm volatile("xchgl %0, %1"
   200002:	ba 01 00 00 00       	mov    $0x1,%edx
   200007:	87 15 04 80 19 00    	xchg   %edx,0x198004
-	int i;
 
 	for (i = 0; i < RUNCOUNT; i++) {
 		// Write characters to the console, yielding after each one.
+
+	#ifndef PART8
 		while(atomic_swap((uint32_t*)&lock,1) != 0){};
   20000d:	85 d2                	test   %edx,%edx
   20000f:	75 f1                	jne    200002 <start+0x2>

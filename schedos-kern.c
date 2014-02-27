@@ -153,15 +153,21 @@ interrupt(registers_t *reg)
 		current->p_exit_status = reg->reg_eax;
 		schedule();
 
-	case INT_SYS_USER1:
+	case INT_SYS_USER1: 
 		// 'sys_user*' are provided for your convenience, in case you
 		// want to add a system call.
 		/* Your code here (if you want). */
 		current->p_priority = reg->reg_eax;
 
-	case INT_SYS_USER2:
+	case INT_SYS_USER2: // LOCK
 		/* Your code here (if you want). */
-		run(current);
+	 	while(lock == 1){};
+		lock = 1;
+		break;
+
+	case INT_SYS_USER3: // UNLOCK
+		lock = 0;
+		break;	
 
 	case INT_CLOCK:
 		// A clock interrupt occurred (so an application exhausted its
