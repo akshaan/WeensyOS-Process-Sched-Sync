@@ -301,40 +301,40 @@ schedule(void)
 
 	}
 
-	int k = (pid + 1) % NPROCS;
+		int k = (pid + 1) % NPROCS;
   10013f:	8d 42 01             	lea    0x1(%edx),%eax
   100142:	bb 05 00 00 00       	mov    $0x5,%ebx
   100147:	99                   	cltd   
   100148:	f7 fb                	idiv   %ebx
-	while(1)
-	{
-		if(proc_array[k].p_state == P_RUNNABLE && proc_array[k].p_priority == min)
+		while(1)
+		{
+			if(proc_array[k].p_state == P_RUNNABLE && \
   10014a:	6b c2 54             	imul   $0x54,%edx,%eax
   10014d:	83 b8 6c 70 10 00 01 	cmpl   $0x1,0x10706c(%eax)
   100154:	75 0f                	jne    100165 <schedule+0xc9>
   100156:	05 24 70 10 00       	add    $0x107024,%eax
   10015b:	39 48 50             	cmp    %ecx,0x50(%eax)
   10015e:	75 05                	jne    100165 <schedule+0xc9>
-	{	next = k; break; }
+			{next = k; break; }
 		
-		k = (k + 1) % NPROCS;
-	}
+			k = (k + 1) % NPROCS;
+		}
 	
-	run(&proc_array[next]);
+		run(&proc_array[next]);
   100160:	83 ec 0c             	sub    $0xc,%esp
   100163:	eb a5                	jmp    10010a <schedule+0x6e>
-	while(1)
-	{
-		if(proc_array[k].p_state == P_RUNNABLE && proc_array[k].p_priority == min)
-	{	next = k; break; }
+		{
+			if(proc_array[k].p_state == P_RUNNABLE && \
+		   	proc_array[k].p_priority == min)
+			{next = k; break; }
 		
-		k = (k + 1) % NPROCS;
+			k = (k + 1) % NPROCS;
   100165:	8d 42 01             	lea    0x1(%edx),%eax
   100168:	eb dd                	jmp    100147 <schedule+0xab>
-	}
-	
-	run(&proc_array[next]);
-}		
+
+	//if(scheduling_algorithm == 3){
+
+			
 	// If we get here, we are running an unknown scheduling algorithm.
 	cursorpos = console_printf(cursorpos, 0x100, "\nUnknown scheduling algorithm %d\n", scheduling_algorithm);
   10016a:	8b 15 00 80 19 00    	mov    0x198000,%edx
@@ -492,9 +492,9 @@ start(void)
 	// Set up hardware (schedos-x86.c)
 	segments_init();
   100211:	e8 e6 00 00 00       	call   1002fc <segments_init>
-	interrupt_controller_init(0);
+	interrupt_controller_init(1);
   100216:	83 ec 0c             	sub    $0xc,%esp
-  100219:	6a 00                	push   $0x0
+  100219:	6a 01                	push   $0x1
   10021b:	e8 d7 01 00 00       	call   1003f7 <interrupt_controller_init>
 	console_clear();
   100220:	e8 5b 02 00 00       	call   100480 <console_clear>
@@ -648,7 +648,7 @@ start(void)
   1002d6:	75 c8                	jne    1002a0 <start+0x9e>
 
 	// Initialize the scheduling algorithm.
-	scheduling_algorithm = 2;
+	scheduling_algorithm = 0;
 
 	// Switch to the first process.
 	run(&proc_array[1]);
@@ -664,8 +664,8 @@ start(void)
   1002e7:	80 0b 00 
 
 	// Initialize the scheduling algorithm.
-	scheduling_algorithm = 2;
-  1002ea:	c7 05 34 7a 10 00 02 	movl   $0x2,0x107a34
+	scheduling_algorithm = 0;
+  1002ea:	c7 05 34 7a 10 00 00 	movl   $0x0,0x107a34
   1002f1:	00 00 00 
 
 	// Switch to the first process.

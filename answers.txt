@@ -28,6 +28,8 @@ Did you complete Exercise 4A or Exercise 4B?
 
 Exercise 5:
 
+The first clock interrupt occurs during process 4. In the pattern shown, the first deviation from the regular round-robin schedule is when process 1 is shceduled after process 3. This means that the interrupt occurred during process 4, which caused schedule() to be called. The round-robin scheduler then scheduled process1 ( since 1 comes after 4). This caused 1 to be run after 3.
+
 
 (Exercise 6 is a coding exercise)
 

@@ -65,7 +65,7 @@ start(void)
 
 	// Set up hardware (schedos-x86.c)
 	segments_init();
-	interrupt_controller_init(0);
+	interrupt_controller_init(1);
 	console_clear();
 
 	// Initialize process descriptors as empty
@@ -101,7 +101,7 @@ start(void)
 	cursorpos = (uint16_t *) 0xB8000;
 
 	// Initialize the scheduling algorithm.
-	scheduling_algorithm = 2;
+	scheduling_algorithm = 0;
 
 	// Switch to the first process.
 	run(&proc_array[1]);
@@ -237,17 +237,23 @@ schedule(void)
 
 	}
 
-	int k = (pid + 1) % NPROCS;
-	while(1)
-	{
-		if(proc_array[k].p_state == P_RUNNABLE && proc_array[k].p_priority == min)
-	{	next = k; break; }
+		int k = (pid + 1) % NPROCS;
+		while(1)
+		{
+			if(proc_array[k].p_state == P_RUNNABLE && \
+		   	proc_array[k].p_priority == min)
+			{next = k; break; }
 		
-		k = (k + 1) % NPROCS;
-	}
+			k = (k + 1) % NPROCS;
+		}
 	
-	run(&proc_array[next]);
-}		
+		run(&proc_array[next]);
+		}	
+
+
+	//if(scheduling_algorithm == 3){
+
+			
 	// If we get here, we are running an unknown scheduling algorithm.
 	cursorpos = console_printf(cursorpos, 0x100, "\nUnknown scheduling algorithm %d\n", scheduling_algorithm);
 	while (1)
