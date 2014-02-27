@@ -16,6 +16,7 @@
 
 #ifndef PRINTCHAR
 #define PRINTCHAR	('1' | 0x0C00)
+//#define PRIORITY 4
 #endif
 
 void
@@ -26,6 +27,7 @@ start(void)
 	for (i = 0; i < RUNCOUNT; i++) {
 		// Write characters to the console, yielding after each one.
 		*cursorpos++ = PRINTCHAR;
+	//	sys_prior(1);
 		sys_yield();
 	}
 
