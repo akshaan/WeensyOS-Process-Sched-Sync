@@ -86,4 +86,14 @@ static inline void sys_lock_release(void)
 		     : "cc", "memory");
 
 }
+
+/* System call to set process shares */
+static inline void sys_shares(int shares)
+{
+	
+	asm volatile("int %0\n"
+ 	       	     : : "i" (INT_SYS_USER4),
+        		 "a" (shares)
+        	     : "cc", "memory");
+}
 #endif

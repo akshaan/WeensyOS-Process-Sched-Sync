@@ -6,5 +6,5 @@
  *****************************************************************************/
 
 #define PRINTCHAR	('4' | 0x0E00)
-//#define PRIORITY 1
+#define SHARES 1
 #include "schedos-1.c"

@@ -23,7 +23,10 @@ Average wait time for scheduling_algorithm 1: 480 ms
 
 Exercise 4:
 
-Did you complete Exercise 4A or Exercise 4B?
+Did you complete Exercise 4A or Exercise 4B? BOTH.
+
+p_priority algorithm = scheduling_algorithm 2
+propotional share algorithm = scheduling_algorithm 3
 
 
 Exercise 5:

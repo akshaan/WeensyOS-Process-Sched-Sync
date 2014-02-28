@@ -65,7 +65,7 @@ start(void)
 
 	// Set up hardware (schedos-x86.c)
 	segments_init();
-	interrupt_controller_init(1);
+	interrupt_controller_init(0);
 	console_clear();
 
 	// Initialize process descriptors as empty
@@ -94,6 +94,10 @@ start(void)
 
 		// Set initial priorities to zero
 		proc->p_priority = 0;
+
+		// Set initial shares and count
+		proc->p_shares = 0;
+		proc->p_count = 0;
 	}
 
 	// Initialize the cursor-position shared variable to point to the
@@ -101,7 +105,7 @@ start(void)
 	cursorpos = (uint16_t *) 0xB8000;
 
 	// Initialize the scheduling algorithm.
-	scheduling_algorithm = 0;
+	scheduling_algorithm = 3;
 
 	// Switch to the first process.
 	run(&proc_array[1]);
@@ -158,16 +162,24 @@ interrupt(registers_t *reg)
 		// want to add a system call.
 		/* Your code here (if you want). */
 		current->p_priority = reg->reg_eax;
+		run(current);
+
 
 	case INT_SYS_USER2: // LOCK
 		/* Your code here (if you want). */
 	 	while(lock == 1){};
 		lock = 1;
-		break;
+		run(current);
 
 	case INT_SYS_USER3: // UNLOCK
 		lock = 0;
-		break;	
+		run(current);
+
+
+	case INT_SYS_USER4: // Set shares for process
+		current->p_shares = reg->reg_eax;
+		run(current);
+			
 
 	case INT_CLOCK:
 		// A clock interrupt occurred (so an application exhausted its
@@ -260,9 +272,47 @@ schedule(void)
 		}	
 
 
-	//if(scheduling_algorithm == 3){
+	if(scheduling_algorithm == 3){
+		
+		int i;
+		pid_t next_pid = 0;	
+		int flag = 0;
 
+	
+		for(i = 1; i < NPROCS; i++)
+		{
+			if(proc_array[i].p_state == P_RUNNABLE && proc_array[i].p_shares == 0)
+			{next_pid = i;goto run;}
+
+		}
+
+		for(i = 1; i < NPROCS; i++)
+		{
+			if(proc_array[i].p_shares != proc_array[i].p_count && proc_array[i].p_state == P_RUNNABLE)
+				flag = 1;
+
+		}
+
+		if(flag == 0)
+		for(i = 1; i < NPROCS; i++)
+		{
+			proc_array[i].p_count = 0;
+		}
+
+
+		for(i = 1; i < NPROCS; i++)
+		{
+			if(proc_array[i].p_state == P_RUNNABLE && proc_array[i].p_shares > proc_array[i].p_count)
+		
+			{next_pid = i; break;}
 			
+		}
+		
+			proc_array[next_pid].p_count++;
+			run:
+			run(&proc_array[i]);
+	
+}
 	// If we get here, we are running an unknown scheduling algorithm.
 	cursorpos = console_printf(cursorpos, 0x100, "\nUnknown scheduling algorithm %d\n", scheduling_algorithm);
 	while (1)

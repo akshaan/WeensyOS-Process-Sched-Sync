@@ -17,7 +17,8 @@
 #ifndef PRINTCHAR
 #define PRINTCHAR	('1' | 0x0C00)
 //#define PRIORITY 4
-//#define PART8
+#define SHARES 4
+#define PART8
 #endif
 
 void
@@ -39,6 +40,7 @@ start(void)
 		*cursorpos++ = PRINTCHAR;
 		sys_lock_release();
 	#endif
+		sys_shares(SHARES);
 	//	sys_prior(1);
 		sys_yield();
 	}
